@@ -1,0 +1,45 @@
+#' Load a Matrix
+#'
+#' This function loads a file as a matrix. It assumes that the first column
+#' contains the rownames and the subsequent columns are the sample identifiers.
+#' Any rows with duplicated row names will be dropped with the first one being
+#' kepted.
+#'
+#' @param infile Path to the input file
+#' @return A matrix of the infile
+#' @export
+load_mat <- function(infile){
+  in.dt <- data.table::fread(infile, header = TRUE)
+  in.dt <- in.dt[!duplicated(in.dt[, 1]), ]
+  in.mat <- as.matrix(in.dt[, -1, with = FALSE])
+  rownames(in.mat) <- unlist(in.dt[, 1, with = FALSE])
+  in.mat
+}
+
+# devtools is a package full of devtools that helps with building R packages. It was created by Hadley Wickham.
+install.packages("devtools")
+
+# roxygen2 is a useful tool that is used for documenting the functions
+install.packages("roxygen2")
+
+# Create the framework for the R package using devtools.
+devtools::create("myfirstpackage")
+
+# Adding your R functions. This creates a file with your R functions.
+load_mat <- function(infile){
+  in.dt <- data.table::fread(infile, header = TRUE)
+  in.dt <- in.dt[!duplicated(in.dt[, 1]), ]
+  in.mat <- as.matrix(in.dt[, -1, with = FALSE])
+  rownames(in.mat) <- unlist(in.dt[, 1, with = FALSE])
+  in.mat
+}
+
+# Using the load_mat() function to read in files quickly.
+library("data.table")
+load_mat <- function(infile){
+  in.dt <- fread(infile, header = TRUE)
+  in.dt <- in.dt[!duplicated(in.dt[, 1]), ]
+  in.mat <- as.matrix(in.dt[, -1, with = FALSE])
+  rownames(in.mat) <- unlist(in.dt[, 1, with = FALSE])
+  in.mat
+}
